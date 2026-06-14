@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: party-play-server
+    runtime: node
+    plan: free
+    region: oregon
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGINS
+        value: https://opus-party-games.itsmenate.com,https://opus-party-games.vercel.app
+      - key: PUBLIC_BASE_URL
+        value: https://opus-party-games.itsmenate.com

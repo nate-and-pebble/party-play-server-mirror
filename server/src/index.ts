@@ -17,16 +17,32 @@ const LAN_HOST = detectLanHost();
 // In dev, phones reach the Vite dev server (which proxies the socket to us).
 // In prod, everything is served from this single Node port.
 const PUBLIC_PORT = Number(process.env.PUBLIC_PORT ?? (isDev ? 5173 : PORT));
+// When the client is hosted on a different origin than the server (e.g. Vercel
+// client + Render server) PUBLIC_BASE_URL is the absolute origin baked into the
+// QR/join URL phones scan ("https://opus-party-games.itsmenate.com").
+const PUBLIC_BASE_URL = process.env.PUBLIC_BASE_URL?.replace(/\/+$/, '');
 const buildJoinUrl = (code: string) => {
+  if (PUBLIC_BASE_URL) {
+    const host = PUBLIC_BASE_URL.replace(/^https?:\/\//, '');
+    return { url: `${PUBLIC_BASE_URL}/j/${code}`, host };
+  }
   const host = `${LAN_HOST}:${PUBLIC_PORT}`;
   return { url: `http://${host}/j/${code}`, host };
 };
+
+// CORS_ORIGINS is a comma-separated allowlist of origins permitted to open a
+// Socket.IO connection. If unset, fall back to permissive (dev/LAN use).
+const ALLOWED_ORIGINS = (process.env.CORS_ORIGINS ?? '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+const corsOrigin: boolean | string[] = ALLOWED_ORIGINS.length ? ALLOWED_ORIGINS : true;
 
 const app = express();
 app.disable('x-powered-by');
 const http = createServer(app);
 const io = new Server(http, {
-  cors: { origin: true },
+  cors: { origin: corsOrigin },
   // Keep brief drops invisible; the client re-attaches with its token on reconnect.
   pingInterval: 20000,
   pingTimeout: 25000,

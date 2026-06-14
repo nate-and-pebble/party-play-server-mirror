@@ -10,3 +10,4 @@ client/dist/
 # local capture / test artifacts
 .playwright-mcp/
 /*.png
+.vercel
