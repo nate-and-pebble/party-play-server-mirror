@@ -1,0 +1,26 @@
+{
+  "name": "party-play",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Party Play — a web-native party-game platform. The browser is the shared screen; phones are the controllers.",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently -n server,client -c magenta,cyan \"npm:dev:server\" \"npm:dev:client\"",
+    "dev:server": "cross-env NODE_ENV=development tsx watch server/src/index.ts",
+    "dev:client": "vite --config client/vite.config.ts",
+    "build": "vite build --config client/vite.config.ts",
+    "start": "cross-env NODE_ENV=production tsx server/src/index.ts",
+    "typecheck": "tsc -p server/tsconfig.json --noEmit && tsc -p client/tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

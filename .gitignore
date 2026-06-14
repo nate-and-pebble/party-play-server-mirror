@@ -1,0 +1,12 @@
+node_modules/
+dist/
+client/dist/
+*.log
+.DS_Store
+.env
+.env.local
+.vite/
+
+# local capture / test artifacts
+.playwright-mcp/
+/*.png
