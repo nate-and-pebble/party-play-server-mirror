@@ -17,10 +17,15 @@
     "start": "cross-env NODE_ENV=production tsx server/src/index.ts",
     "typecheck": "tsc -p server/tsconfig.json --noEmit && tsc -p client/tsconfig.json --noEmit"
   },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2"
+  },
   "devDependencies": {
     "concurrently": "^9.1.0",
-    "cross-env": "^7.0.3",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   }
 }
